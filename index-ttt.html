@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>TIC TAK TOE</title>
+</head>
+
+<body>
+    <div class="msg-container hide">
+      <p id="msg">Winner</p>
+    </div>
+    <main>
+        <h1>Tic Tak TOE</h1>
+        <div class="container">
+            <div class="game">
+
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+
+            </div>
+        </div>
+        <button id="reset">Reset Button </button>
+    </main>
+<!-- thus is our style section -->
+<style>
+/* ---------------------------
+  Corrected Professional CSS
+  (Works with your original HTML)
+   - preserves original sizes & layout
+   - subtle modern styles & animations
+---------------------------- */
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Body: keep your base color but add depth */
+body{
+  background: linear-gradient(180deg, #00B2CA 0%, #00A6BE 40%, #007D8B 100%);
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #05202a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* Center container (keeps your 70vh) */
+.container{
+  height: 70vh;
+  width: 100%;
+  max-width: 920px;          /* constrain on large screens */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 18px;                 /* consistent vertical spacing */
+}
+
+/* Game board shell (keeps 60vmin, but constrained for small screens) */
+.game{
+  height: 60vmin;
+  width: 60vmin;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* ✅ Always 3 boxes per row */
+  grid-template-rows: repeat(3, 1fr);      /* ✅ Always 3 rows */
+  gap: 10px;
+
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* small lift on hover for subtle polish */
+.game:hover{ transform: translateY(-6px); }
+
+/* Individual boxes (preserve your 18vmin sizing) */
+.box{
+  height: 18vmin;
+  width: 18vmin;
+  max-width: calc((60vmin - 40px) / 3); /* keep grid consistent */
+  max-height: calc((60vmin - 40px) / 3);
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(180deg,#e6fafc 0%, #d9f7fa 40%, #c2eef1 100%);
+  box-shadow:
+    0 8px 18px rgba(2,28,33,0.25),
+    inset 0 2px 8px rgba(255,255,255,0.6);
+  font-size: 8vmin;
+  font-weight: 800;
+  color: #F79256; /* your chosen color preserved */
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 220ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/* hover & press feedback (keeps size feel) */
+.box:hover{
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 34px rgba(2,28,33,0.32);
+}
+.box:active{
+  transform: translateY(0px) scale(0.99);
+}
+
+/* disabled state - when box filled */
+.box:disabled{
+  cursor: default;
+  background: linear-gradient(180deg,#022133 0%, #031e2a 100%);
+  color: #ffd6b2; /* contrast color for filled */
+  box-shadow: inset 0 6px 16px rgba(0,0,0,0.6),
+              0 6px 18px rgba(0,0,0,0.3);
+  transform: none;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+/* Reset button - keep original sizing but modernized */
+#reset {
+  padding: 1rem 1.25rem;
+  font-size: 1.15rem;
+  background: linear-gradient(180deg,#7DCFB6 0%, #5fcaa0 100%);
+  color: #062b20;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(2,28,33,0.25);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+#reset:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(2,28,33,0.34);
+}
+#reset:active{
+  transform: translateY(-2px);
+}
+
+/* Message styling: keep your 5vmin sizing but polished */
+#msg {
+  color: #022b2c;
+  font-size: 4.8vmin;         /* slightly smaller to avoid overflow */
+  font-weight: 800;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.88);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(2,28,33,0.18);
+  transform-origin: center;
+  letter-spacing: 0.6px;
+  transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 300ms;
+}
+
+/* message container centre and stack */
+.msg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* hide helper */
+.hide { display: none !important; }
+
+/* subtle animation for appearing messages */
+.msg-show {
+  animation: msgPop 520ms cubic-bezier(.2,.9,.2,1);
+}
+@keyframes msgPop{
+  from { transform: translateY(14px) scale(.96); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* responsive tweaks */
+@media (max-width: 520px) {
+  .container { height: auto; gap: 12px; padding-top: 18px; padding-bottom: 18px; }
+  .game { width: 92vmin; height: 92vmin; gap: 8px; padding: 8px; border-radius: 12px; }
+  .box { height: 26vmin; width: 26vmin; font-size: 12vmin; border-radius: 10px; }
+  #msg { font-size: 6vmin; padding: 8px 12px; }
+  #reset { padding: 0.9rem 1.2rem; font-size: 1rem; border-radius: 10px; }
+}
+
+/* optional: single-line accessibility focus style */
+.box:focus {
+  outline: 3px solid rgba(15,102,120,0.25);
+  outline-offset: 2px;
+}
+
+
+</style>
+
+
+<!-- this is our javascript section -->
+
+
+
+
+
+
+
+    <script>
+let boxes = document.querySelectorAll('.box');
+let resetBtn = document.querySelector("#reset");
+let msgContainer = document.querySelector(".msg-container");
+let msg = document.querySelector("#msg");
+
+let turn = true;
+let clickCount = 0;
+
+let name1 = prompt("Enter Player 1 Name:");
+let name2 = prompt("Enter Player 2 Name:");
+
+const winPattern = [
+  [0,1,2],
+  [0,3,6],
+  [0,4,8],
+  [1,4,7],
+  [2,5,8],
+  [2,4,6],
+  [3,4,5],
+  [6,7,8],
+];
+
+boxes.forEach((box) => {
+  box.addEventListener("click", () => {
+
+    if (turn) {
+      box.innerText = "O";
+      turn = false;
+    } else {
+      box.innerText = "X";
+      turn = true;
+    }
+
+    clickCount++;
+    box.disabled = true;
+
+    let isWinner = checkWinner();
+
+    if (clickCount === 9 && !isWinner) {
+      draw();
+    }
+  });
+});
+
+const checkWinner = () => {
+  for (let pattern of winPattern){
+    let pos1 = boxes[pattern[0]].innerText;
+    let pos2 = boxes[pattern[1]].innerText;
+    let pos3 = boxes[pattern[2]].innerText;
+
+    if(pos1 !== "" && pos2 !== "" && pos3 !== ""){
+      if(pos1 === pos2 && pos2 === pos3){
+
+        if(pos1 === "O"){
+          player1();
+        } else {
+          player2();
+        }
+
+        disableBoxes();
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+const draw = () => {
+  msg.innerText = "Game was a Draw!";
+  msgContainer.classList.remove("hide");
+  disableBoxes();
+};
+
+const player1 = () => {
+  msg.innerText = `Player 1 (${name1}) Wins!`;
+  msgContainer.classList.remove("hide");
+};
+
+const player2 = () => {
+  msg.innerText = `Player 2 (${name2}) Wins!`;
+  msgContainer.classList.remove("hide");
+};
+
+const disableBoxes = () =>{
+  for(let box of boxes){
+    box.disabled = true;
+  }
+}
+
+const enableBoxes = () =>{
+  for(let box of boxes){
+    box.disabled = false;
+    box.innerText = "";
+  }
+}
+
+const resetGame = () =>{
+  enableBoxes();
+  turn = true;
+  clickCount = 0;
+  msgContainer.classList.add("hide");
+}
+
+resetBtn.addEventListener("click", resetGame);
+    </script>
+</body>
+
+</html>
